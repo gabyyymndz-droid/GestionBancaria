@@ -1,7 +1,7 @@
-# BancaPOO
+# POOmerica
 ## Sistema de Gestión Bancaria – Gugu Gaga
 
-BancaPOO es una aplicación desarrollada en Java la cual permite simular una gestión de cuentas bancarias. En esta, se pueden realizar distintas operaciones financieras y consultar el historial de movimientos de cada usuario, todo a través de una interfaz en la consola. Solventando la necesidad de gestionar transacciones de forma accesible, digital y organizada.
+POOmerica es una aplicación desarrollada en Java la cual permite simular una gestión de cuentas bancarias. En esta, se pueden realizar distintas operaciones financieras y consultar el historial de movimientos de cada usuario, todo a través de una interfaz en la consola. Solventando la necesidad de gestionar transacciones de forma accesible, digital y organizada.
 
 ----------
 
