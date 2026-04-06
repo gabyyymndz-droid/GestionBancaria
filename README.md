@@ -41,13 +41,13 @@ Al estar trabajando en un sistema de gestión bancaria, el tema de los errores e
 
 Al completar la descarga y compilación del código, el sistema carga 4 cuentas automáticas de ejemplo para pruebas inmediatas sin la necesidad de crear nuevos datos.
 
-Para disfrutar el código completo, y verificar los limites, se deben seguir los siguienres pasos:
+Para utilizar el codigo junto a todas sus funciones puedes seguir los siguientes pasos:
 
 1.  **Crear una cuenta nueva:** Esta es la opción 5, el sistema solicitara un código único y nombre del usuario. Se seleccionara el tipo de cuenta (estándar, ahorro o corriente).
     
 2.  **Realizar un deposito:** Esta es la opción 1, añade la cantidad de dinero que desees a tu cuenta. Dependiendo el tipo de cuenta se pueden verificar los limites:
     
-    -   Intenta retirar $5,500 de una cuenta de ahorro. Se espera un mensaje que indique que el limite por retiro es de $5000 y se niegue la operación.
+    -   Intenta retirar $5,500 de una cuenta de ahorro. Se espera un mensaje que indique que el límite por retiro es de $5000 y se niegue la operación.
         
     -   Intenta retirar $500 de una cuenta del tipo corriente sin saldo, ahora el nuevo saldo debería ser -$500 con la descripción de “retiro con sobregiro”.
         
