@@ -2,22 +2,23 @@ import java.util.Scanner;
 
 public class Main {
 
-    static Cuenta[] cuentas     = new Cuenta[50];
-    static int      totalCuentas = 0;
-    static Scanner  sc           = new Scanner(System.in);
+    static Cuenta[] cuentas = new Cuenta[50];
+    static int totalCuentas = 0;
+    static Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args){
         cargarCuentasIniciales();
 
         System.out.println("╔══════════════════════════════════╗");
-        System.out.println("║   NovaBanca - Sistema Bancario   ║");
+        System.out.println("║   POOmerica - Sistema Bancario   ║");
         System.out.println("╚══════════════════════════════════╝");
 
         boolean salir = false;
-        while (!salir) {
+        while (!salir){
             mostrarMenu();
             String opcion = sc.nextLine().trim();
-            switch (opcion) {
+            switch (opcion){
                 case "1": menuDeposito();      break;
                 case "2": menuRetiro();        break;
                 case "3": menuTransferencia(); break;
@@ -25,16 +26,15 @@ public class Main {
                 case "5": menuCuentas();       break;
                 case "6": menuDashboard();     break;
                 case "0":
-                    System.out.println("\n  Hasta luego!");
+                    System.out.println("Gracias por usarnos");
                     salir = true;
                     break;
                 default:
-                    System.out.println("  [!] Opcion no valida.");
+                    System.out.println("Opcion invalida");
             }
         }
     }
-
-    static void mostrarMenu() {
+    static void mostrarMenu(){
         System.out.println("\n┌──────────────────────────────┐");
         System.out.println("│        MENU PRINCIPAL        │");
         System.out.println("├──────────────────────────────┤");
@@ -49,9 +49,8 @@ public class Main {
         System.out.print("  Opcion: ");
     }
 
-    // ── 1. Depositar ───────────────────────────────────────────────────────
-    static void menuDeposito() {
-        System.out.println("\n-- DEPOSITAR --");
+    static void menuDeposito(){
+        System.out.println("-- DEPOSITAR --");
         Cuenta cuenta = pedirCuenta();
         if (cuenta == null) return;
 
@@ -59,106 +58,123 @@ public class Main {
         if (monto <= 0) return;
 
         cuenta.depositar(monto);
-        System.out.printf("  [OK] Deposito exitoso. Nuevo saldo: $%.2f%n", cuenta.getSaldo());
+        System.out.printf("Deposito exitoso. Nuevo saldo: $%.2f%n", cuenta.getSaldo()); // %n es un salto de linea "Enter"
     }
 
-    // ── 2. Retirar ─────────────────────────────────────────────────────────
-    static void menuRetiro() {
-        System.out.println("\n-- RETIRAR --");
+
+    static void menuRetiro(){
+        System.out.println("--RETIRAR--");
         Cuenta cuenta = pedirCuenta();
         if (cuenta == null) return;
 
         double monto = pedirMonto();
         if (monto <= 0) return;
 
-        if (cuenta.retirar(monto)) {
-            System.out.printf("  [OK] Retiro exitoso. Nuevo saldo: $%.2f%n", cuenta.getSaldo());
-        } else {
-            System.out.println("  [!] Saldo insuficiente o monto no permitido.");
+        if (cuenta.retirar(monto)){
+            System.out.printf("Retiro exitoso. Nuevo saldo: $%.2f%n", cuenta.getSaldo());
+        } else{
+            System.out.println("Saldo insuficiente o monto no permitido");
         }
     }
 
-    // ── 3. Transferir ──────────────────────────────────────────────────────
-    static void menuTransferencia() {
-        System.out.println("\n-- TRANSFERIR --");
-        System.out.print("  Cuenta origen:  ");
+
+    static void menuTransferencia(){
+        System.out.println("--TRANSFERIR--");
+
+        System.out.println("  Cuenta origen: ");
         Cuenta origen = buscarCuenta(sc.nextLine().trim());
-        if (origen == null) { System.out.println("  [!] Cuenta origen no encontrada."); return; }
-
-        System.out.print("  Cuenta destino: ");
-        Cuenta destino = buscarCuenta(sc.nextLine().trim());
-        if (destino == null) { System.out.println("  [!] Cuenta destino no encontrada."); return; }
-
-        if (origen == destino) { System.out.println("  [!] Las cuentas deben ser diferentes."); return; }
-
-        double monto = pedirMonto();
-        if (monto <= 0) return;
-
-        if (origen.transferir(destino, monto)) {
-            System.out.printf("  [OK] Transferencia exitosa: $%.2f de %s a %s%n",
-                    monto, origen.getCodigo(), destino.getCodigo());
-        } else {
-            System.out.println("  [!] Saldo insuficiente.");
-        }
-    }
-
-    // ── 4. Historial ───────────────────────────────────────────────────────
-    static void menuHistorial() {
-        System.out.println("\n-- HISTORIAL --");
-        Cuenta cuenta = pedirCuenta();
-        if (cuenta == null) return;
-
-        System.out.printf("%n  Cliente : %s%n", cuenta.getCliente());
-        System.out.printf("  Tipo    : %s%n", cuenta.getTipo());
-        System.out.printf("  Saldo   : $%.2f%n", cuenta.getSaldo());
-        System.out.println("  " + "-".repeat(55));
-
-        if (cuenta.totalMovimientos == 0) {
-            System.out.println("  Sin movimientos registrados.");
+        if (origen == null){
+            System.out.println("Cuenta origen no encontrada");
             return;
         }
-        for (int i = 0; i < cuenta.totalMovimientos; i++) {
-            System.out.println("  " + (i + 1) + ". " + cuenta.historial[i]);
+
+        System.out.println("  Cuenta destino: ");
+        Cuenta destino = buscarCuenta(sc.nextLine().trim());
+        if (destino == null){
+            System.out.println("Cuenta destino no encontrada");
+            return;
+        }
+
+        if (origen == destino) {
+            System.out.println("La cuenta destino debe ser unica");
+            return;
+        }
+
+        double monto = pedirMonto();
+        if (monto <= 0) return;
+
+        if (origen.transferir(destino, monto)){
+            System.out.printf("Transferencia exitosa: $%.2f de %s a %s%n", monto, origen.getCodigo(), destino.getCodigo());
+        } else {
+            System.out.println("Saldo insuficiente");
         }
     }
 
-    // ── 5. Gestionar cuentas ───────────────────────────────────────────────
-    static void menuCuentas() {
+
+
+    static void menuHistorial(){
+        System.out.println("--HISTORIAL--");
+
+        Cuenta cuenta = pedirCuenta();
+        if (cuenta == null) return;
+
+        System.out.printf("%n Cliente: %s%n", cuenta.getCliente()); //%s: String
+        System.out.printf("  Tipo    : %s%n", cuenta.getTipo());
+        System.out.printf("  Saldo   : $%.2f%n", cuenta.getSaldo());
+        System.out.println(" " + "-".repeat(55)); //Agregacion estetica -------------...
+
+        if (cuenta.totalMovimientos == 0){
+            System.out.println(" Sin movimientos registrados");
+            return;
+        }
+        for (int i = 0; i < cuenta.totalMovimientos; i++){
+            System.out.println(" "+ (i + 1) + " " + cuenta.historial[i]);
+        }
+    }
+
+
+    static void menuCuentas(){
         System.out.println("\n-- GESTIONAR CUENTAS --");
         System.out.println("  1. Crear cuenta");
         System.out.println("  2. Listar todas las cuentas");
         System.out.println("  3. Buscar una cuenta");
         System.out.print("  Opcion: ");
 
-        switch (sc.nextLine().trim()) {
-            case "1": crearCuenta();  break;
+        switch (sc.nextLine().trim()){
+            case "1": crearCuenta(); break;
             case "2": listarCuentas(); break;
             case "3":
                 Cuenta c = pedirCuenta();
                 if (c != null) mostrarDetalleCuenta(c);
                 break;
             default:
-                System.out.println("  [!] Opcion no valida.");
+                System.out.println("Opcion no valida");
         }
     }
 
-    static void crearCuenta() {
-        System.out.print("  Codigo:  ");
+    static void crearCuenta(){
+        System.out.println("  Codigo: ");
         String codigo = sc.nextLine().trim();
 
-        if (codigo.isEmpty() || !codigo.matches("[A-Za-z0-9]+")) {
-            System.out.println("  [!] Codigo invalido (solo letras y numeros)."); return;
+        if (codigo.isEmpty() || !codigo.matches("[A-Za-z0-9]+")){
+            System.out.println("Codigo no valido, solo letras y numeros");
+            return;
         }
-        if (buscarCuenta(codigo) != null) {
-            System.out.println("  [!] Ya existe una cuenta con ese codigo."); return;
+        if (buscarCuenta(codigo) != null){
+            System.out.println("Ya existe cuenta con ese numero");
+            return;
         }
-        if (totalCuentas >= cuentas.length) {
-            System.out.println("  [!] Limite de cuentas alcanzado."); return;
+        if (totalCuentas >= cuentas.length){
+            System.out.println("Limite de cuentas alcanzado"); //Porque al inicio definimos que "cuentas" tenia maximo 50
+            return;
         }
 
-        System.out.print("  Cliente: ");
+        System.out.print(" Cliente: "); //El print LN es un Enter, el print se queda ahi mismo
         String cliente = sc.nextLine().trim();
-        if (cliente.isEmpty()) { System.out.println("  [!] El nombre no puede estar vacio."); return; }
+        if (cliente.isEmpty()){
+            System.out.println("El nombre no puede estar vacio");
+            return;
+        }
 
         System.out.println("  Tipo de cuenta:");
         System.out.println("    1. Estandar");
@@ -167,30 +183,30 @@ public class Main {
         System.out.print("  Opcion: ");
 
         Cuenta nueva;
-        switch (sc.nextLine().trim()) {
-            case "2": nueva = new CuentaAhorros(codigo, cliente);   break;
+        switch (sc.nextLine().trim()){
+            case "2": nueva = new CuentaAhorros(codigo, cliente); break;
             case "3": nueva = new CuentaCorriente(codigo, cliente); break;
-            default:  nueva = new Cuenta(codigo, cliente);          break;
+            default: nueva = new Cuenta(codigo, cliente); break; // Ya usa por defecto "Estandar" --> En Cuenta
         }
 
-        cuentas[totalCuentas++] = nueva;
-        System.out.printf("  [OK] Cuenta %s creada (%s) para %s.%n",
-                codigo, nueva.getTipo(), cliente);
+        cuentas [totalCuentas++] = nueva;
+        System.out.printf(" Cuenta %s creada (%s) para %s.%n", codigo, nueva.getTipo(), cliente);
     }
 
-    static void listarCuentas() {
-        System.out.println();
-        System.out.printf("  %-8s %-12s %-20s %12s%n", "Codigo", "Tipo", "Cliente", "Saldo");
+
+
+    static void listarCuentas(){
+        System.out.println("");
+        System.out.printf( "  %-8s %-12s %-20s %12s%n", "Codigo", "Tipo", "Cliente", "Saldo"); //Solo son los titulos de la tablita
         System.out.println("  " + "-".repeat(56));
-        for (int i = 0; i < totalCuentas; i++) {
+        for (int i = 0; i < totalCuentas; i++){
             Cuenta c = cuentas[i];
-            System.out.printf("  %-8s %-12s %-20s %12s%n",
-                    c.getCodigo(), c.getTipo(), c.getCliente(),
-                    "$" + String.format("%.2f", c.getSaldo()));
+            System.out.printf("  %-8s %-12s %-20s %12s%n", c.getCodigo(), c.getTipo(), c.getCliente(), "$" + String.format("%.2f", c.getSaldo()));
+
+
         }
     }
-
-    static void mostrarDetalleCuenta(Cuenta c) {
+    static void mostrarDetalleCuenta(Cuenta c){
         System.out.printf("%n  Codigo      : %s%n", c.getCodigo());
         System.out.printf("  Tipo        : %s%n", c.getTipo());
         System.out.printf("  Cliente     : %s%n", c.getCliente());
@@ -198,13 +214,12 @@ public class Main {
         System.out.printf("  Movimientos : %d%n", c.totalMovimientos);
     }
 
-    // ── 6. Dashboard ───────────────────────────────────────────────────────
-    static void menuDashboard() {
+    static void menuDashboard(){
         double saldoTotal = 0;
-        int totalMovs     = 0;
-        for (int i = 0; i < totalCuentas; i++) {
+        int totalMovs = 0;
+        for (int i = 0; i < totalCuentas; i++){
             saldoTotal += cuentas[i].getSaldo();
-            totalMovs  += cuentas[i].totalMovimientos;
+            totalMovs += cuentas[i].totalMovimientos;
         }
 
         System.out.println("\n-- DASHBOARD --");
@@ -215,35 +230,35 @@ public class Main {
         listarCuentas();
     }
 
-    // ── Helpers ────────────────────────────────────────────────────────────
-    static Cuenta pedirCuenta() {
-        System.out.print("  Codigo de cuenta: ");
+    static Cuenta pedirCuenta(){
+        System.out.println("  Codigo cuenta: ");
         String cod = sc.nextLine().trim();
         Cuenta c = buscarCuenta(cod);
-        if (c == null) System.out.println("  [!] Cuenta no encontrada.");
+        if (c == null)System.out.println("Cuenta no encontrada");
         return c;
     }
 
-    static double pedirMonto() {
+    static double pedirMonto(){
         System.out.print("  Monto: $");
-        try {
-            double monto = Double.parseDouble(sc.nextLine().trim());
-            if (monto <= 0) System.out.println("  [!] El monto debe ser mayor a cero.");
+        try{
+            double monto = Double.parseDouble(sc.nextLine().trim()); //Double.parseDouble: Agarra un String y lo convierte en double
+            if (monto <= 0) System.out.println(" El monto debe ser mayor a 0");
             return monto;
-        } catch (NumberFormatException e) {
-            System.out.println("  [!] Monto invalido. Ingresa solo numeros.");
+        } catch (NumberFormatException e){ //Cuando le doy letra embes de numero me lanza un error, con NumberFormatException lo omito
+            System.out.println(" Monto invalido. Ingresa solo numeros");
             return -1;
         }
     }
 
-    static Cuenta buscarCuenta(String codigo) {
+
+    static Cuenta buscarCuenta(String codigo){
         for (int i = 0; i < totalCuentas; i++)
             if (cuentas[i].getCodigo().equals(codigo)) return cuentas[i];
         return null;
     }
 
-    // ── Cuentas iniciales hardcodeadas ─────────────────────────────────────
-    static void cargarCuentasIniciales() {
+
+    static void cargarCuentasIniciales(){
         Cuenta c1          = new Cuenta("001", "Juan Perez");
         CuentaAhorros c2   = new CuentaAhorros("002", "Maria Garcia");
         CuentaCorriente c3 = new CuentaCorriente("003", "Carlos Lopez");

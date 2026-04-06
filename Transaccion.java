@@ -8,20 +8,25 @@ public class Transaccion {
     String descripcion;
     LocalDateTime fecha;
 
-    public Transaccion(String tipo, double monto, String descripcion) {
-        this.tipo        = tipo;
-        this.monto       = monto;
+    public Transaccion(String tipo, double monto, String descripcion){
+        this.tipo = tipo;
+        this.monto = monto;
         this.descripcion = descripcion;
-        this.fecha       = LocalDateTime.now();
+        this.fecha = LocalDateTime.now();
     }
 
-    public String getFechaFormateada() {
+    public String getFechaFormateada(){
         return fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 
-    public String toString() {
-        String signo = tipo.equals("DEPOSITO") ? "+" : "-";
-        return "[" + tipo + "] " + signo + "$" + String.format("%.2f", monto)
-                + " | " + descripcion + " | " + getFechaFormateada();
+    public String toString(){
+        String signo;
+        if (tipo == "DEPOSITO"){
+            signo = "+";
+        } else {
+            signo = "-";
+        }
+        String mensaje = "[" + tipo + "] " + signo + "$" + String.format("%.2f", monto) + " | " + descripcion + " | " + getFechaFormateada();
+        return mensaje;
     }
 }

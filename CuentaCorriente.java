@@ -1,27 +1,39 @@
-public class CuentaCorriente extends Cuenta {
+public class CuentaCorriente extends Cuenta{
 
     private double limiteCredito;
 
-    public CuentaCorriente(String codigo, String cliente, double limiteCredito) {
+    public CuentaCorriente(String codigo, String cliente, double limiteCredito){
         super(codigo, cliente);
         this.limiteCredito = limiteCredito;
     }
 
-    public CuentaCorriente(String codigo, String cliente) {
-        this(codigo, cliente, 1000.0);
+    public CuentaCorriente(String codigo, String cliente){
+        this(codigo,cliente, 100.0);
     }
 
     @Override
     public boolean retirar(double monto) {
-        if (monto <= 0 || monto > saldo + limiteCredito) return false;
-        saldo -= monto;
-        String desc = saldo < 0 ? "Retiro con sobregiro" : "Retiro de efectivo";
-        registrar(new Transaccion("RETIRO", monto, desc));
+        if (monto <= 0 || monto > saldo + limiteCredito) {
+            return false;
+        }
+        saldo = saldo - monto;
+        String descripcion;
+        if (saldo < 0){
+            descripcion = "Retiro con sobregiro";
+        }else {
+            descripcion = "Retiro de efectivo";
+        }
+        Transaccion nuevaTransaccion = new Transaccion("RETIRO", monto, descripcion);
+        registrar(nuevaTransaccion);
         return true;
     }
 
     @Override
-    public String getTipo() { return "Corriente"; }
+    public String getTipo() {
+        return "Corriente";
+    }
 
-    public double getLimiteCredito() { return limiteCredito; }
+    public double getLimiteCredito(){
+        return limiteCredito;
+    }
 }
